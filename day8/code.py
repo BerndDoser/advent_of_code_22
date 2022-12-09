@@ -56,32 +56,28 @@ for i in range(1, LENGTH - 1):
         FACTOR = 0
         for left in range(j-1, -1, -1):
             FACTOR += 1
-            if trees[i][left] >= height:
-                break
+            if trees[i][left] >= height: break
 
         scenic_score[i][j] = FACTOR
 
         FACTOR = 0
         for right in range(j+1, LENGTH):
             FACTOR += 1
-            if trees[i][right] >= height:
-                break
+            if trees[i][right] >= height: break
 
         scenic_score[i][j] *= FACTOR
 
         FACTOR = 0
         for up in range(i-1, -1, -1):
             FACTOR += 1
-            if trees[up][j] >= height:
-                break
+            if trees[up][j] >= height: break
 
         scenic_score[i][j] *= FACTOR
 
         FACTOR = 0
         for down in range(i+1, LENGTH):
             FACTOR += 1
-            if trees[down][j] >= height:
-                break
+            if trees[down][j] >= height: break
 
         scenic_score[i][j] *= FACTOR
 
