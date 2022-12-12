@@ -10,11 +10,14 @@ nb_nodes = nb_rows * nb_cols
 
 G = nx.DiGraph()
 
+start = []
 for i in range(nb_rows):
     for j in range(nb_cols):
         if map[i][j] == 'S':
-            start = i * nb_cols + j
+            start.append(i * nb_cols + j)
             map[i] = map[i].replace('S', 'a')
+        if map[i][j] == 'a':
+            start.append(i * nb_cols + j)
         if map[i][j] == 'E':
             end = i * nb_cols + j
             map[i] = map[i].replace('E', 'z')
@@ -35,4 +38,11 @@ for i in range(nb_rows):
         if diff > -2:
             G.add_edge(i * nb_cols + j, i * nb_cols + j+1)
 
-print("answer part 1:", len(nx.dijkstra_path(G, start, end)) - 1)
+length = []
+for s in start:
+    try:
+        length.append(len(nx.dijkstra_path(G, s, end)) - 1)
+    except Exception:
+        pass
+
+print("answer part 2:", min(length))

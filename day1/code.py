@@ -5,7 +5,7 @@ for line in open('day1/data.txt'):
         continue
     calories[-1] += int(line.strip())
 
-print("answer part 1: ", max(calories))
+print("answer part 1:", max(calories))
 
 calories.sort()
-print("answer part 2: ", sum(calories[-3:]))
+print("answer part 2:", sum(calories[-3:]))
