@@ -3,7 +3,7 @@ import sys
 rocks = []
 lower = [sys.maxsize, 0]
 upper = [0, 0]
-for line in open("day14/example.txt"):
+for line in open("day14/data.txt"):
     line = line.strip().split('->')
     one_rock = []
     for coord in line:
@@ -16,40 +16,45 @@ for line in open("day14/example.txt"):
     rocks.append(one_rock)
 
 dim = [m - n + 1 for m,n in zip(upper, lower)]
-scan = [['.' for x in range(dim[0])] for y in range(dim[1])]
+scan = set()
 x_min = lower[0]
 
 for rock in rocks:
     for i in range(len(rock) - 1):
         print(rock[i], rock[i+1])
         for j in range(min(rock[i][0], rock[i+1][0]), max(rock[i][0], rock[i+1][0]) + 1):
-            scan[j - x_min][rock[i][1]] = '#'
+            scan.add((j, rock[i][1]))
         for j in range(min(rock[i][1], rock[i+1][1]), max(rock[i][1], rock[i+1][1]) + 1):
-            scan[rock[i][0] - x_min][j] = '#'
+            scan.add((rock[i][0], j))
 
 cycle = 0
 overflow = False
-
+sand = set()
 while not overflow:
-    x = 500 - x_min
-    for y in range(dim[1] + 1):
-        if y == dim[1] - 1:
+    x = 500
+    for y in range(dim[1] + 2):
+        if y == dim[1] + 1:
             overflow = True
             break
-        print(x,y)
-        if scan[x][y+1] != '.':
-            if scan[x-1][y+1] == '.':
+        if (x, y+1) in scan.union(sand):
+            if not (x-1, y+1) in scan.union(sand):
                 x -= 1
-            elif scan[x+1][y+1] == '.':
+            elif not (x+1, y+1) in scan.union(sand):
                 x += 1
             else:
-                scan[x][y] == 'o'
+                sand.add((x,y))
                 break
-    cycle += 1
+    if not overflow:
+        cycle += 1
 
 for y in range(dim[1]):
     for x in range(dim[0]):
-        print(scan[x][y], end='')
+        if (x + x_min, y) in scan:
+            print("#", end='')
+        elif (x + x_min, y) in sand:
+            print('o', end='')
+        else:
+            print(".", end='')
     print('')
 
 print('answer:', cycle)
